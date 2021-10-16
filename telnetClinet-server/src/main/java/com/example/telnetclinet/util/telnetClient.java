@@ -1,4 +1,4 @@
-package com.example.util;
+package com.example.telnetclinet.util;
 
 import java.io.IOException;
 import java.io.InputStream;

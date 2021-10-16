@@ -9,5 +9,5 @@
 ~~~
 ### telnetClinet-front 是前端
 ~~~
-    基于vue
+    基于vue2
 ~~~
