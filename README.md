@@ -5,7 +5,7 @@
 ~~~
 ### telnetClinet-serve 是后端
 ~~~
-    基于spring-boot
+    基于spring-boot,使用IDEA打开此级目录即可
 ~~~
 ### telnetClinet-front 是前端
 ~~~
