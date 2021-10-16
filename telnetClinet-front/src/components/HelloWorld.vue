@@ -3,29 +3,28 @@
         <left-content class="left">
 
         </left-content>
-
         <right-content class="right">
 
         </right-content>
     </div>
 </template>
 
-<script type="application/ecmascript">
-    import LeftContent from "./views/leftContent.vue"
-    import RightContent from "./views/rightContent.vue"
-    export default {
-        name: '',
-      components: {RightContent, LeftContent},
-      data () {
-            return {
-                msg: ''
-            }
-        }
+<script>
+import LeftContent from '../views/leftContent'
+import RightContent from '../views/rightContent'
+export default {
+  name: 'HelloWorld',
+  components: {LeftContent, RightContent},
+  data () {
+    return {
+      msg: 'Welcome to Your Vue.js App'
     }
+  }
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang='scss' rel="stylesheet/scss" type="text/css">
+<style scoped>
 .wrapper {
   position: relative;
   height: 0;
