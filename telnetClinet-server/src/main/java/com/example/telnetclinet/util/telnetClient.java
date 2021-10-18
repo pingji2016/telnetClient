@@ -4,8 +4,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+import java.util.Properties;
 
 import org.apache.commons.net.telnet.TelnetClient;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
 
 public class telnetClient {
 
@@ -14,31 +18,63 @@ public class telnetClient {
     private TelnetClient telnet;
     private InputStream in;                // 输入流,接收返回信息
     private PrintStream out;        // 向服务器写入 命令
+    private static String ipAddress;
+    private static int port;
+    private static String password;
 
     /**
-     * @param termtype        协议类型：VT100、VT52、VT220、VTNT、ANSI
-     * @param prompt        结果结束标识
+     * 通过配置文件名读取内容
+     *
+     * @param fileName
+     * @return
      */
-    public telnetClient(String termtype, String prompt){
+    public static Properties readPropertiesFile(String fileName) {
+        try {
+            Resource resource = new ClassPathResource(fileName);
+            Properties props = PropertiesLoaderUtils.loadProperties(resource);
+            return props;
+        } catch (Exception e) {
+            System.out.println("————读取配置文件：" + fileName + "出现异常，读取失败————");
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 读取配置文件
+     */
+    public static void readRouteProperies() {
+        Properties properties = readPropertiesFile("application.properties");
+        ipAddress = properties.getProperty("route.address");
+        port = Integer.parseInt(properties.getProperty("route.port"));
+        password = properties.getProperty("route.password");
+    }
+
+    /**
+     * @param termtype 协议类型：VT100、VT52、VT220、VTNT、ANSI
+     * @param prompt   结果结束标识
+     */
+    public telnetClient(String termtype, String prompt) {
         telnet = new TelnetClient(termtype);
         setPrompt(prompt);
     }
 
-    public telnetClient(String termtype){
+    public telnetClient(String termtype) {
         telnet = new TelnetClient(termtype);
     }
 
-    public telnetClient(){
+    public telnetClient() {
         telnet = new TelnetClient();
     }
 
     /**
      * 登录到目标主机
+     *
      * @param ip
      * @param port
      * @param password
      */
-    public Boolean login(String ip, int port,String password){
+    public Boolean login(String ip, int port, String password) {
         try {
             telnet.connect(ip, port);
             in = telnet.getInputStream();
@@ -49,46 +85,46 @@ public class telnetClient {
             write("enable");
             readUntil("Password:");
             write(password);
-            if(readUntil("#")!=null){
+            if (readUntil("#") != null) {
                 return true;
-            }
-            else {
+            } else {
                 return false;
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
+
     /**
      * 读取分析结果
      *
-     * @param pattern        匹配到该字符串时返回结果
+     * @param pattern 匹配到该字符串时返回结果
      * @return
      */
     public String readUntil(String pattern) {
         StringBuffer sb = new StringBuffer();
         try {
-            char lastChar = (char)-1;
-            boolean flag = pattern!=null&&pattern.length()>0;
-            if(flag)
+            char lastChar = (char) -1;
+            boolean flag = pattern != null && pattern.length() > 0;
+            if (flag)
                 lastChar = pattern.charAt(pattern.length() - 1);
             char ch;
             int code = -1;
             while ((code = in.read()) != -1) {
-                ch = (char)code;
+                ch = (char) code;
                 sb.append(ch);
                 //匹配到结束标识时返回结果
                 if (flag) {
                     if (ch == lastChar && sb.toString().endsWith(pattern)) {
                         return sb.toString();
                     }
-                }else{
+                } else {
                     //如果没指定结束标识,匹配到默认结束标识字符时返回结果
-                    if(ch == promptChar)
+                    if (ch == promptChar)
                         return sb.toString();
                 }
                 //登录失败时返回结果
-                if(sb.toString().contains("Login Failed")){
+                if (sb.toString().contains("Login Failed")) {
                     return sb.toString();
                 }
             }
@@ -97,6 +133,7 @@ public class telnetClient {
         }
         return sb.toString();
     }
+
     /**
      * 发送命令
      *
@@ -110,6 +147,7 @@ public class telnetClient {
             e.printStackTrace();
         }
     }
+
     /**
      * 发送命令,返回执行结果
      *
@@ -131,9 +169,9 @@ public class telnetClient {
     /**
      * 关闭连接
      */
-    public void distinct(){
+    public void distinct() {
         try {
-            if(telnet!=null&&!telnet.isConnected())
+            if (telnet != null && !telnet.isConnected())
                 telnet.disconnect();
         } catch (IOException e) {
             e.printStackTrace();
@@ -141,9 +179,9 @@ public class telnetClient {
     }
 
     public void setPrompt(String prompt) {
-        if(prompt!=null){
+        if (prompt != null) {
             this.prompt = prompt;
-            this.promptChar = prompt.charAt(prompt.length()-1);
+            this.promptChar = prompt.charAt(prompt.length() - 1);
         }
     }
 
@@ -153,17 +191,16 @@ public class telnetClient {
      * @param args
      */
     public void loginRoute(String[] args) {
-        telnetClient telnet = new telnetClient("VT220","#");        //Windows,用VT220,否则会乱码
-        if(telnet.login("172.16.0.3", 23, "CISCO")){
+        telnetClient telnet = new telnetClient("VT220", "#");        //Windows,用VT220,否则会乱码
+        if (telnet.login(ipAddress, port, password)) {
             System.out.println("login");
             String rs = telnet.sendCommand("sh ip route");
             System.out.println(rs);
             try {
-                rs = new String(rs.getBytes("ISO-8859-1"),"GBK");        //转一下编码
+                rs = new String(rs.getBytes("ISO-8859-1"), "GBK");        //转一下编码
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
-            System.out.println(rs);
         }
     }
 }
