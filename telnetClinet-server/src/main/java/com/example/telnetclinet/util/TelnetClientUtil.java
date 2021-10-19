@@ -6,12 +6,14 @@ import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
+import com.example.telnetclinet.message.CodeMsg;
+import com.example.telnetclinet.message.Result;
 import org.apache.commons.net.telnet.TelnetClient;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 
-public class telnetClient {
+public class TelnetClientUtil {
 
     private String prompt = "#";        //结束标识字符串,Windows中是>,Linux中是#
     private char promptChar = '>';        //结束标识字符
@@ -54,16 +56,16 @@ public class telnetClient {
      * @param termtype 协议类型：VT100、VT52、VT220、VTNT、ANSI
      * @param prompt   结果结束标识
      */
-    public telnetClient(String termtype, String prompt) {
+    public TelnetClientUtil(String termtype, String prompt) {
         telnet = new TelnetClient(termtype);
         setPrompt(prompt);
     }
 
-    public telnetClient(String termtype) {
+    public TelnetClientUtil(String termtype) {
         telnet = new TelnetClient(termtype);
     }
 
-    public telnetClient() {
+    public TelnetClientUtil() {
         telnet = new TelnetClient();
     }
 
@@ -154,16 +156,14 @@ public class telnetClient {
      * @param command
      * @return
      */
-    public String sendCommand(String command) {
+    public Result sendCommand(String command) {
         try {
             write(command);
-            return readUntil(prompt);
+            return Result.success(readUntil(prompt));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
-//        System.out.println(command);
-//        return command;
+        return Result.error(CodeMsg.COMMAND_ERROR);
     }
 
     /**
@@ -188,19 +188,20 @@ public class telnetClient {
     /**
      * 登录路由器
      *
-     * @param args
      */
-    public void loginRoute(String[] args) {
-        telnetClient telnet = new telnetClient("VT220", "#");        //Windows,用VT220,否则会乱码
+    public Result loginRoute() {
+        TelnetClientUtil telnet = new TelnetClientUtil("VT220", "#");        //Windows,用VT220,否则会乱码
         if (telnet.login(ipAddress, port, password)) {
             System.out.println("login");
-            String rs = telnet.sendCommand("sh ip route");
-            System.out.println(rs);
-            try {
-                rs = new String(rs.getBytes("ISO-8859-1"), "GBK");        //转一下编码
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
+            Result rs = telnet.sendCommand("sh ip route");
+            System.out.println(rs.getData());
+//            try {
+//                rs = new String(rs.getBytes("ISO-8859-1"), "GBK");        //转一下编码
+//            } catch (UnsupportedEncodingException e) {
+//                e.printStackTrace();
+//            }
+            return rs;
         }
+        return Result.error(CodeMsg.LOGIN_ERROR);
     }
 }
