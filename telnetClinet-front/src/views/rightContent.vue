@@ -5,8 +5,7 @@
         <div >
           <label>命令</label>
           <input placeholder="输入命令"> <button>发送</button>
-        </div>
-        <div>
+          <br>
           <label>返回结果</label>
           <br>
           <textarea cols="50" rows="20">
