@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/telnetClient.iml" filepath="$PROJECT_DIR$/.idea/telnetClient.iml" />
       <module fileurl="file://$PROJECT_DIR$/telnetClinet-server/telnetClinet.iml" filepath="$PROJECT_DIR$/telnetClinet-server/telnetClinet.iml" />
     </modules>
   </component>
