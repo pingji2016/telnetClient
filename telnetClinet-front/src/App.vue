@@ -38,8 +38,6 @@ export default {
 
 <style lang="sss" scoped>
 @import '../node_modules/vue-material/dist/vue-material.css';
-/*@import 'assets/css.css';*/
-/*@import 'assets/icon.css';*/
 
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;

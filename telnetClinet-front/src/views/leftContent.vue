@@ -1,25 +1,22 @@
 <template>
   <div class="left">
-    <!--  控件 -->
-    <span style="display: inline-block; vertical-align: top; padding: 5px; width:110px">
-      <div id="myPaletteDiv" style="border: solid 1px black; height: 420px"></div>
-    </span>
-
-    <!--  设计面板 -->
-    <span style="display: inline-block; vertical-align: top; padding: 5px; width:80%">
-      <div id="myFlowDesignerDiv" style="border: solid 1px black; height: 420px"></div>
-    </span>
+    <useGoDiagramTreeLayout>
+    </useGoDiagramTreeLayout>
   </div>
 </template>
 
 <script>
+import useGoDiagramTreeLayout from './useGoDiagramTreeLayout'
 export default {
-  name: 'leftContent'
+  name: 'leftContent',
+  components: {
+    useGoDiagramTreeLayout
+  }
 }
 </script>
 
 <style scoped>
 .left {
-  background: #6d6d6d;
+  background: #A1F5EBDF;
 }
 </style>
