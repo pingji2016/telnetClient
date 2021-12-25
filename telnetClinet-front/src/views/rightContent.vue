@@ -3,16 +3,16 @@
     <h1 class="title">{{ nodeSelected }}</h1>
     <el-tabs type="border-card">
       <el-tab-pane label="可视化配置">
-        <el-form :inline="true" :model="formInline" class="leftcard">
+        <el-form :inline="true" class="leftcard">
           <el-form-item >
             <span style="font-size: 25px;padding-right: 10px;font-weight: bold">命令</span>
-            <el-input v-model="formInline.order" placeholder="输入命令" style="width: 400px"></el-input>
+            <el-input v-model="cmd" placeholder="输入命令" style="width: 400px"></el-input>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="onSubmit">发送</el-button>
           </el-form-item>
         </el-form>
-        <el-form :model="formInline" style="  text-align:left;margin-left: 50px;">
+        <el-form style="  text-align:left;margin-left: 50px;">
           <el-form-item >
             <span style="font-size: 25px;text-align:left;font-weight: bold">返回列表</span>
           </el-form-item>
@@ -43,10 +43,7 @@ export default {
   data () {
     return {
       nodeSelected: 'RouterA',
-      formInline: {
-        user: '',
-        region: ''
-      },
+      cmd: '',
       returnAns: ''
     }
   },
@@ -64,7 +61,14 @@ export default {
       }
     },
     onSubmit () {
-      console.log('submit!')
+      console.log('submit!', this.cmd)
+      const data = 'command=' + this.cmd
+      this.$axios.post('/sendCommand', data).then(response => {
+        if (response.data) {
+          console.log(response.data)
+          this.returnAns = response.data
+        }
+      }).catch()
     }
   }
 }

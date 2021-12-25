@@ -1,7 +1,8 @@
 <template>
   <div id="app">
     <div class="black">
-      <el-button class="left"> 导入文件 </el-button>
+      <!--      <input id="inputElement" name="file" type="file" accept="yml"  />-->
+      <el-button class="left" @click="uploadFiles"> 导入文件 </el-button>
       <el-select class="left" v-model="value" placeholder="请选择">
         <el-option
           v-for="item in options"
@@ -15,22 +16,55 @@
   </div>
 </template>
 
-<script>
+<script >
+import {getConf1, getConf2, getConf3} from './file/fileinit'
 export default {
   name: 'App',
   data () {
     return {
-      options: [{
-        value: 'conf.yml',
+      options: [],
+      value: ''
+    }
+  },
+  mounted () {
+    this.initValue()
+  },
+  methods: {
+    initValue () {
+      this.options = [{
+        value: getConf1(),
         label: 'conf.yml'
       }, {
-        value: 'conf1.yml',
+        value: getConf2(),
         label: 'conf1.yml'
       }, {
-        value: 'conf2.yml',
+        value: getConf3(),
         label: 'conf2.yml'
-      }],
-      value: ''
+      }]
+    },
+    uploadFiles () {
+      console.log('value==', this.value)
+      // let inputElement = document.getElementById('inputElement')
+      let file = this.value
+
+      let param = new FormData() // 创建form对象
+      param.append('file', file) // 通过append向form对象添加数据
+
+      param.append('chunk', '别的数据') // 添加form表单中其他数据
+      console.log(param.get('file')) // FormData私有类对象，访问不到，可以通过get判断值是否传进去
+
+      let config = {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+      }
+
+      this.$axios.post('/uploadFile', param, config).then(response => {
+        if (response.data) {
+          console.log(response.data)
+        }
+        // eslint-disable-next-line handle-callback-err
+      }).catch(err => {
+        alert('请求失败')
+      })
     }
   }
 }

@@ -1,5 +1,5 @@
 import axios from 'axios'
-const urlBase = 'http://localhost:8080'
+const urlBase = 'http://localhost:8088'
 
 /**
  * 查询信息
@@ -28,4 +28,21 @@ export function sendCommandAPI (data) {
     .catch(function (error) {
       console.log(error)
     })
+}
+
+/**
+ * 发送命令
+ * @param {*} data = {
+ *   fileName
+ * }
+ */
+export function getYamlByFileNameAPI (data) {
+  this.$axios.post('/getYamlScript', data).then(response => {
+    if (response.data) {
+      console.log(response.data)
+    }
+    // eslint-disable-next-line handle-callback-err
+  }).catch(err => {
+    alert('请求失败')
+  })
 }
