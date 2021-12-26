@@ -64,7 +64,8 @@ export default {
       returnAns: '',
       routerAns: '',
       tableData: [],
-      nodeSelect: 'RouterA'
+      nodeSelect: 'RouterA',
+      fileSelected: 'conf.yml'
     }
   },
   created () {
@@ -77,16 +78,20 @@ export default {
       this.$EventBus.$on('node-change', function (value) {
         self.nodeChange(value)
       })
+      this.$EventBus.$on('yml-change', function (value) {
+        self.fileSelected = value.name
+      })
     },
     nodeChange (newNode) {
       this.nodeSelect = newNode
+      console.log('fileSelected ==', this.fileSelected)
       if (newNode !== this.nodeSelected) {
         if (newNode === 'RouterA') {
-          this.tableData = getRouterAPort()
+          this.tableData = getRouterAPort(this.fileSelected)
         } else if (newNode === 'RouterB') {
-          this.tableData = getRouterBPort()
+          this.tableData = getRouterBPort(this.fileSelected)
         } else if (newNode === 'RouterC') {
-          this.tableData = getRouterCPort()
+          this.tableData = getRouterCPort(this.fileSelected)
         }
       }
     },

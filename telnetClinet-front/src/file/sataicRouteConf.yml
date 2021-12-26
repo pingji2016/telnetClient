@@ -1,0 +1,41 @@
+RouterA:
+  hostname: RTA
+  ip: 172.16.0.1
+  password: cisco
+  port:
+    s0/0/0: 192.168.20.1,255.255.255.0
+    s0/0/1:
+    lo0: 1.1.1.1,255.255.255.0
+    lo1:
+  command: int s0/0/0,clock rate 56000,no shut,exit,ip route 192.168.30.0 255.255.255.0 192.168.20.2,ip route 2.2.2.0 255.255.255.0 192.168.20.2,ip route 3.3.3.0 255.255.255.0 192.168.20.2
+  ping: 192.168.30.2,2.2.2.2,3.3.3.3
+  show: show ip route
+  showtest:
+
+RouterB:
+  hostname: RTB
+  ip: 172.16.0.2
+  password: cisco
+  port:
+    s0/0/0: 192.168.20.2,255.255.255.0
+    s0/0/1: 192.168.30.1,255.255.255.0
+    lo0: 2.2.2.2,255.255.255.0
+    lo1:
+  command: int s0/0/0,clock rate 56000,no shut,exit,int s0/0/1,clock rate 56000,no shut,exitip route 1.1.1.0 255.255.255.0 192.168.20.1,ip route 3.3.3.0 255.255.255.0 192.168.30.2
+  ping: 1.1.1.1,3.3.3.3
+  show: show ip route
+  showtest:
+
+RouterC:
+  hostname: RTC
+  ip: 172.16.0.3
+  password: cisco
+  port:
+    s0/0/0: 192.168.30.2,255.255.255.0
+    s0/0/1:
+    lo0: 3.3.3.3,255.255.255.0
+    lo1:
+  command: int s0/0/0,clock rate 56000,no shut,exit,ip route 0.0.0.0 0.0.0.0 192.168.30.1
+  ping: 1.1.1.1,2.2.2.2,192.168.20.1
+  show: show ip route
+  showtest:

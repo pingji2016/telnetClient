@@ -1,0 +1,41 @@
+RouterA:
+  hostname: RTA
+  ip: 172.16.0.1
+  password: cisco
+  port:
+    s0/0/0: 192.168.20.1,255.255.255.0
+    s0/0/1:
+    lo0: 192.168.10.1,255.255.255.0
+    lo1:
+  command:  router rip,network 192.168.10.0,network 192.168.20.0
+  ping: 192.168.30.2,192.168.40.1
+  show: show ip route
+  showtest:
+
+RouterB:
+  hostname: RTB
+  ip: 172.16.0.2
+  password: cisco
+  port:
+    s0/0/0: 192.168.20.2,255.255.255.0
+    s0/0/1: 192.168.30.1,255.255.255.0
+    lo0:
+    lo1:
+  command:  router rip,network 192.168.20.0,network 192.168.30.0
+  ping: 192.168.10.1,192.168.40.1
+  show: show ip route
+  showtest:
+
+RouterC:
+  hostname: RTC
+  ip: 172.16.0.3
+  password: cisco
+  port:
+    s0/0/0: 192.168.30.2,255.255.255.0
+    s0/0/1:
+    lo0: 192.168.40.1,255.255.255.0
+    lo1:
+  command:  router rip,network 192.168.30.0,network 192.168.40.0
+  ping: 192.168.10.1,192.168.20.1
+  show: show ip route
+  showtest:
