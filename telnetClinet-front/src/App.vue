@@ -3,7 +3,7 @@
     <div class="black">
       <!--      <input id="inputElement" name="file" type="file" accept="yml"  />-->
       <el-button class="left" @click="uploadFiles"> 导入文件 </el-button>
-      <el-select class="left" v-model="value" placeholder="请选择">
+      <el-select class="left" v-model="value" placeholder="请选择" @change="selectChange">
         <el-option
           v-for="item in options"
           :key="item.value"
@@ -41,6 +41,10 @@ export default {
         value: getConf3(),
         label: 'conf2.yml'
       }]
+    },
+    selectChange (value) {
+      // console.log('dddd', value)
+      this.$EventBus.$emit('yml-change', value)
     },
     uploadFiles () {
       console.log('value==', this.value)

@@ -25,7 +25,7 @@
             label="Status">
           </el-table-column>
         </el-table>
-        <el-button type="primary" @click="clickbutton" style="top:50%;margin-left: 20px;float: left">提交</el-button>
+<!--        <el-button type="primary" @click="clickbutton" style="top:50%;margin-left: 20px;float: left">提交</el-button>-->
     </div>
 
     <el-form :inline="true" class="leftcard">
@@ -55,7 +55,7 @@
 </template>
 
 <script>
-
+import { getRouterAPort, getRouterBPort, getRouterCPort } from '../file/fileinit'
 export default {
   name: 'ScriptComp',
   data () {
@@ -63,19 +63,37 @@ export default {
       pingOrder: '',
       returnAns: '',
       routerAns: '',
-      tableData: [{
-        port: 'FastEtherent0/0',
-        ip: '172.16.0.1',
-        mask: '255.255.0.0',
-        status: 'Up'
-      }]
+      tableData: [],
+      nodeSelect: 'RouterA'
     }
   },
+  created () {
+    this.getInit()
+  },
   methods: {
+    getInit () {
+      this.tableData = getRouterAPort()
+      var self = this
+      this.$EventBus.$on('node-change', function (value) {
+        self.nodeChange(value)
+      })
+    },
+    nodeChange (newNode) {
+      this.nodeSelect = newNode
+      if (newNode !== this.nodeSelected) {
+        if (newNode === 'RouterA') {
+          this.tableData = getRouterAPort()
+        } else if (newNode === 'RouterB') {
+          this.tableData = getRouterBPort()
+        } else if (newNode === 'RouterC') {
+          this.tableData = getRouterCPort()
+        }
+      }
+    },
     clickbutton () {
       const data = {
-        routerName: '123',
-        ip: '333'
+        routerName: this.nodeSelect,
+        ip: this.pingOrder
       }
       this.$axios.post('/pingIP', data).then(response => {
         if (response.data) {
@@ -89,7 +107,7 @@ export default {
     },
     getRouter () {
       const data = {
-        routerName: '123'
+        routerName: this.nodeSelect
       }
       this.$axios.post('/getRouterTable', data).then(response => {
         if (response.data) {

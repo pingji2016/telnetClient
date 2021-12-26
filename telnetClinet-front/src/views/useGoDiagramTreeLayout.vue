@@ -23,13 +23,13 @@ export default {
     return {
       diagramData: { // passed to <diagram> as its modelData
         nodeDataArray: [
-          { key: 1, text: 'Router1', color: 'lightblue', source: require('../../static/art/router.png') },
-          { key: 2, text: 'Router2', color: 'orange', source: require('../../static/art/router.png') },
-          { key: 3, text: 'Router3', color: 'lightgreen', source: require('../../static/art/router.png') }
+          { key: 1, text: 'RouterA', color: 'lightblue', source: require('../../static/art/router.png') },
+          { key: 2, text: 'RouterB', color: 'orange', source: require('../../static/art/router.png') },
+          { key: 3, text: 'RouterC', color: 'lightgreen', source: require('../../static/art/router.png') }
         ],
         linkDataArray: [
           // eslint-disable-next-line standard/object-curly-even-spacing
-          { from: 1, to: 2, text: '39ms'},
+          { from: 1, to: 2 },
           { from: 2, to: 3 }
         ]
       },
@@ -83,7 +83,7 @@ export default {
       if (node instanceof window.go.Node) {
         this.currentNode = node
         this.currentNodeText = node.data.text
-        console.log('ddd', this.currentNodeText)
+        // console.log('ddd', this.currentNodeText)
         this.$EventBus.$emit('node-change', this.currentNodeText)
       } else {
         this.currentNode = null

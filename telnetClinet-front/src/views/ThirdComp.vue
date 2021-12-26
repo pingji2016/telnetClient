@@ -4,8 +4,6 @@
     <el-form :model="formInline" style="  text-align:left;margin-left: 50px;">
       <el-form-item >
         <el-input :rows="30" type="textarea" v-model="returnAns" style="width: 90%;">
-          <h1>sssssssss</h1>
-          <router-comp></router-comp>
         </el-input>
       </el-form-item>
       <el-form-item >
@@ -16,7 +14,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import RouterItem from './RouterItem'
 
 export default {
@@ -26,29 +23,45 @@ export default {
   },
   data () {
     return {
-      formInline: {
-        user: '',
-        region: ''
-      },
       returnAns: '',
-      tableData: [{
-        port: '2016-05-02',
-        ip: '王小虎',
-        mask: '上海市普陀区金沙江路 1518 弄',
-        status: '上海市普陀区金沙江路 1518 弄'
-      }]
+      fileSelected: ''
     }
+  },
+  created () {
+    var self = this
+    this.$EventBus.$on('yml-change', function (value) {
+      let reader = new FileReader()
+      self.fileSelected = value.name
+      reader.onload = function () {
+        self.returnAns = this.result
+      }
+      reader.readAsText(value)
+    })
   },
   methods: {
     clickbutton () {
-      console.log('clickbutton', this.textarea2)
-      axios.post('http://localhost:8080/sendCommand', this.textarea2)
-        .then(function (response) {
-          console.log(response)
+      let file = new File([this.returnAns], this.fileSelected,
+        {
+          type: 'text/plain'
         })
-        .catch(function (error) {
-          console.log(error)
-        })
+      let param = new FormData() // 创建form对象
+      param.append('file', file) // 通过append向form对象添加数据
+
+      param.append('chunk', '别的数据') // 添加form表单中其他数据
+      console.log(param.get('file')) // FormData私有类对象，访问不到，可以通过get判断值是否传进去
+
+      let config = {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+      }
+
+      this.$axios.post('/uploadFile', param, config).then(response => {
+        if (response.data) {
+          console.log(response.data)
+        }
+        // eslint-disable-next-line handle-callback-err
+      }).catch(err => {
+        alert('请求失败')
+      })
     }
   }
 }

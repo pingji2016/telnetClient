@@ -1,4 +1,4 @@
-RouterD:
+RouterA:
   hostname: RTA
   ip: 172.16.0.1
   password: CISCO

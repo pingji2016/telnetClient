@@ -1,5 +1,5 @@
 export function getConf1 () {
-  return new File(['RouterD:\n' +
+  return new File(['RouterA:\n' +
     '  hostname: RTA\n' +
     '  ip: 172.16.0.1\n' +
     '  password: CISCO\n' +
@@ -44,7 +44,7 @@ export function getConf1 () {
 }
 
 export function getConf2 () {
-  return new File(['RouterD:\n' +
+  return new File(['RouterA:\n' +
     '  hostname: RTA\n' +
     '  ip: 172.16.0.1\n' +
     '  password: CISCO\n' +
@@ -89,7 +89,7 @@ export function getConf2 () {
 }
 
 export function getConf3 () {
-  return new File(['RouterD:\n' +
+  return new File(['RouterA:\n' +
     '  hostname: RTA\n' +
     '  ip: 172.16.0.1\n' +
     '  password: CISCO\n' +
@@ -131,4 +131,76 @@ export function getConf3 () {
   {
     type: 'text/plain'
   })
+}
+
+export function getRouterAPort () {
+  return [{
+    port: 's0/0/0',
+    ip: '192.168.1.2',
+    mask: '255.255.255.0',
+    status: 'Up'
+  }, {
+    port: 'lo0',
+    ip: '172.16.1.1',
+    mask: '255.255.0.0',
+    status: 'Up'
+  }, {
+    port: 'lo1',
+    ip: '172.16.2.1',
+    mask: '255.255.0.0',
+    status: 'Up'
+  }, {
+    port: 'lo2',
+    ip: '172.16.3.1',
+    mask: '255.255.0.0',
+    status: 'Up'
+  }]
+}
+
+export function getRouterBPort () {
+  return [{
+    port: 's0/0/1',
+    ip: '192.168.1.2',
+    mask: '255.255.255.0',
+    status: 'Up'
+  }, {
+    port: 'lo0',
+    ip: '172.16.1.1',
+    mask: '255.255.0.0',
+    status: 'Up'
+  }, {
+    port: 'lo1',
+    ip: '172.16.2.1',
+    mask: '255.255.0.0',
+    status: 'Up'
+  }, {
+    port: 'lo2',
+    ip: '172.16.3.1',
+    mask: '255.255.0.0',
+    status: 'Up'
+  }]
+}
+
+export function getRouterCPort () {
+  return [{
+    port: 's0/0/2',
+    ip: '192.168.1.2',
+    mask: '255.255.255.0',
+    status: 'Up'
+  }, {
+    port: 'lo0',
+    ip: '172.16.1.1',
+    mask: '255.255.0.0',
+    status: 'Up'
+  }, {
+    port: 'lo1',
+    ip: '172.16.2.1',
+    mask: '255.255.0.0',
+    status: 'Up'
+  }, {
+    port: 'lo2',
+    ip: '172.16.3.1',
+    mask: '255.255.0.0',
+    status: 'Up'
+  }]
 }
