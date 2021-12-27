@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import { getRouterAPort, getRouterBPort, getRouterCPort } from '../file/fileinit'
+import { getRouterAPort } from '../file/fileinit'
 export default {
   name: 'ScriptComp',
   data () {
@@ -84,22 +84,17 @@ export default {
     },
     nodeChange (newNode) {
       this.nodeSelect = newNode
-      console.log('fileSelected ==', this.fileSelected)
-      if (newNode !== this.nodeSelected) {
-        if (newNode === 'RouterA') {
-          this.tableData = getRouterAPort(this.fileSelected)
-        } else if (newNode === 'RouterB') {
-          this.tableData = getRouterBPort(this.fileSelected)
-        } else if (newNode === 'RouterC') {
-          this.tableData = getRouterCPort(this.fileSelected)
+      console.log('nodeSelect ==', this.nodeSelect)
+      let data = 'routerName=' + this.nodeSelect
+      this.$axios.post('/getRouterPorts', data).then(response => {
+        if (response.data) {
+          this.tableData = response.data.data
+          console.log(response.data.data)
         }
-      }
+      }).catch({})
     },
     clickbutton () {
-      const data = {
-        routerName: this.nodeSelect,
-        ip: this.pingOrder
-      }
+      let data = 'routerName=' + this.nodeSelect + '&ip' + this.pingOrder
       this.$axios.post('/pingIP', data).then(response => {
         if (response.data) {
           console.log(response.data)
@@ -111,9 +106,7 @@ export default {
       })
     },
     getRouter () {
-      const data = {
-        routerName: this.nodeSelect
-      }
+      let data = 'routerName=' + this.nodeSelect
       this.$axios.post('/getRouterTable', data).then(response => {
         if (response.data) {
           console.log(response.data)
