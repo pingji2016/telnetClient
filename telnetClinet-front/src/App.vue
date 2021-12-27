@@ -27,9 +27,25 @@ export default {
     }
   },
   mounted () {
-    this.initValue()
+    this.initFileList()
   },
   methods: {
+    initFileList  () {
+      const data = ''
+      this.$axios.post('/getAllFileName', data).then(response => {
+        if (response.data.data) {
+          let optList = response.data.data
+          for (let index = 0; index < optList.length; index++) {
+            this.options.push({
+              value: optList[index],
+              label: optList[index]
+            })
+          }
+        }
+      }).catch(res => {
+        alert('获取文件列表 失败')
+      })
+    },
     initValue () {
       this.options = [{
         value: getConf1(),
@@ -43,8 +59,15 @@ export default {
       }]
     },
     selectChange (value) {
-      // console.log('dddd', value)
+      console.log('dddd', value)
       this.$EventBus.$emit('yml-change', value)
+      // let data = 'fileName=' + value
+      // this.$axios.post('/getYamlScript', data).then(response => {
+      //   if (response.data) {
+      //     console.log(response.data.data)
+      //     this.returnAns = response.data
+      //   }
+      // }).catch({})
     },
     uploadFiles () {
       console.log('value==', this.value)
@@ -65,6 +88,7 @@ export default {
         if (response.data) {
           console.log(response.data)
         }
+        this.initFileList()
         // eslint-disable-next-line handle-callback-err
       }).catch(err => {
         alert('请求失败')

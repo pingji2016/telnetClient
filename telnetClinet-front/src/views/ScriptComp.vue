@@ -79,7 +79,7 @@ export default {
         self.nodeChange(value)
       })
       this.$EventBus.$on('yml-change', function (value) {
-        self.fileSelected = value.name
+        self.fileSelected = value
       })
     },
     nodeChange (newNode) {

@@ -1,7 +1,7 @@
 <template>
   <div>
     <span style="font-size: 20px;float:left;margin-left: 50px;font-weight: bold">脚本文件内容</span>
-    <el-form :model="formInline" style="  text-align:left;margin-left: 50px;">
+    <el-form style=" text-align:left;margin-left: 50px;">
       <el-form-item >
         <el-input :rows="30" type="textarea" v-model="returnAns" style="width: 90%;">
         </el-input>
@@ -27,18 +27,27 @@ export default {
       fileSelected: ''
     }
   },
-  created () {
-    var self = this
-    this.$EventBus.$on('yml-change', function (value) {
-      let reader = new FileReader()
-      self.fileSelected = value.name
-      reader.onload = function () {
-        self.returnAns = this.result
-      }
-      reader.readAsText(value)
-    })
+  mounted () {
+    this.confChange()
   },
   methods: {
+    confChange () {
+      var self = this
+      this.$EventBus.$on('yml-change', function (value) {
+        let data = 'fileName=' + value
+        self.fileSelected = value
+        console.log('data ==' + data)
+        this.$axios.post('/getYamlScript', data).then(response => {
+          if (response.data) {
+            console.log(response.data.data)
+            let jsonData = response.data.data
+            var json2yaml = require('json2yaml')
+            self.returnAns = json2yaml.stringify(jsonData).slice(4)
+            console.log(self.returnAns)
+          }
+        }).catch({})
+      })
+    },
     clickbutton () {
       let file = new File([this.returnAns], this.fileSelected,
         {
@@ -58,6 +67,13 @@ export default {
         if (response.data) {
           console.log(response.data)
         }
+        const data = 'fileName=' + this.fileSelected
+        this.$axios.post('/configByYaml', data).then(response => {
+          console.log(response.data)
+        }).catch(res => {
+          alert('请求失败')
+        })
+
         // eslint-disable-next-line handle-callback-err
       }).catch(err => {
         alert('请求失败')
