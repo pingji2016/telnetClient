@@ -1,8 +1,7 @@
 <template>
   <div id="app">
     <div class="black">
-      <!--      <input id="inputElement" name="file" type="file" accept="yml"  />-->
-      <el-button class="left" @click="uploadFiles"> 导入文件 </el-button>
+      <el-button class="left" @click="dialogTableVisible = true"> 导入文件 </el-button>
       <el-select class="left" v-model="value" placeholder="请选择" @change="selectChange">
         <el-option
           v-for="item in options"
@@ -13,6 +12,10 @@
       </el-select>
     </div>
     <router-view/>
+    <el-dialog title="文件导入" :visible.sync="dialogTableVisible">
+      <input id="inputElement" name="file" type="file" accept="yml"  />
+      <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
+    </el-dialog>
   </div>
 </template>
 
@@ -23,7 +26,9 @@ export default {
   data () {
     return {
       options: [],
-      value: ''
+      value: '',
+      dialogTableVisible: false,
+      fileList: ''
     }
   },
   mounted () {
@@ -35,6 +40,7 @@ export default {
       this.$axios.post('/getAllFileName', data).then(response => {
         if (response.data.data) {
           let optList = response.data.data
+          this.options = []
           for (let index = 0; index < optList.length; index++) {
             this.options.push({
               value: optList[index],
@@ -70,6 +76,7 @@ export default {
       // }).catch({})
     },
     uploadFiles () {
+      this.value = document.getElementById('inputElement').files[0]
       console.log('value==', this.value)
       // let inputElement = document.getElementById('inputElement')
       let file = this.value
@@ -93,6 +100,9 @@ export default {
       }).catch(err => {
         alert('请求失败')
       })
+    },
+    submitUpload () {
+      this.uploadFiles()
     }
   }
 }
