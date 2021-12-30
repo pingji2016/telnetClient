@@ -4,7 +4,11 @@
     <el-tabs type="border-card">
       <el-tab-pane label="可视化配置">
         <el-form :inline="true" class="leftcard">
+          <el-form-item>
+            <el-button type="primary" @click="onConnect">连接</el-button>
+          </el-form-item>
           <el-form-item >
+            <span style="font-size: 25px;padding-right: 10px;font-weight: bold">命令</span>
             <span style="font-size: 25px;padding-right: 10px;font-weight: bold">命令</span>
             <el-input v-model="cmd" placeholder="输入命令" style="width: 400px"></el-input>
           </el-form-item>
@@ -44,7 +48,8 @@ export default {
     return {
       nodeSelected: 'RouterA',
       cmd: '',
-      returnAns: ''
+      returnAns: '',
+      preNode: ''
     }
   },
   created () {
@@ -69,6 +74,26 @@ export default {
           this.returnAns = response.data
         }
       }).catch()
+    },
+    onConnect () {
+      // 先断连接
+      if (this.preNode !== '') {
+        const data = ''
+        this.$axios.post('/distinct', data).then(response => {
+          console.log('关闭连接' + response.data)
+          this.$EventBus.$emit('node-change', this.nodeSelected)
+        }).catch(res => {
+          alert('关闭连接失败')
+        })
+      }
+      // 再开连接
+      const data = 'routerName=' + this.nodeSelected
+      this.$axios.post('/getConnect', data).then(response => {
+        console.log('开启连接' + response.data)
+        this.preNode = this.nodeSelected
+      }).catch(res => {
+        alert('开启连接失败')
+      })
     }
   }
 }

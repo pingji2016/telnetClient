@@ -7,12 +7,12 @@
           border
           style="width: 70%;float: left">
           <el-table-column
-            prop="port"
+            prop="portName"
             label="Port"
             width="180">
           </el-table-column>
           <el-table-column
-            prop="ip"
+            prop="portIP"
             label="IP"
             width="180">
           </el-table-column>
@@ -55,7 +55,6 @@
 </template>
 
 <script>
-import { getRouterAPort } from '../file/fileinit'
 export default {
   name: 'ScriptComp',
   data () {
@@ -73,7 +72,7 @@ export default {
   },
   methods: {
     getInit () {
-      this.tableData = getRouterAPort()
+      this.tableData = []
       var self = this
       this.$EventBus.$on('node-change', function (value) {
         self.nodeChange(value)

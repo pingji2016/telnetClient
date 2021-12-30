@@ -84,24 +84,6 @@ export default {
       if (node instanceof window.go.Node) {
         this.currentNode = node
         this.currentNodeText = node.data.text
-        // 先断连接
-        if (this.preNode !== '') {
-          const data = ''
-          this.$axios.post('/distinct', data).then(response => {
-            console.log('关闭连接' + response.data)
-            this.$EventBus.$emit('node-change', this.currentNodeText)
-          }).catch(res => {
-            alert('关闭连接失败')
-          })
-        }
-        // 再开连接
-        const data = 'routerName=' + this.currentNodeText
-        this.$axios.post('/getConnect', data).then(response => {
-          console.log('开启连接' + response.data)
-          this.preNode = this.currentNodeText
-        }).catch(res => {
-          alert('开启连接失败')
-        })
         this.$EventBus.$emit('node-change', this.currentNodeText)
       } else {
         this.currentNode = null
