@@ -7,8 +7,7 @@
           <el-form-item>
             <el-button type="primary" @click="onConnect">连接</el-button>
           </el-form-item>
-          <el-form-item >
-            <span style="font-size: 25px;padding-right: 10px;font-weight: bold">命令</span>
+          <el-form-item>
             <span style="font-size: 25px;padding-right: 10px;font-weight: bold">命令</span>
             <el-input v-model="cmd" placeholder="输入命令" style="width: 400px"></el-input>
           </el-form-item>

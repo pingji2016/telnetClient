@@ -9,6 +9,10 @@
       <el-form-item >
         <el-button type="primary" style="margin-left: 50%" @click="clickbutton">一键配置</el-button>
       </el-form-item>
+      <el-form-item >
+        <el-input readonly=true :rows="30" type="textarea" v-model="confReturn" style="width: 90%;">
+        </el-input>
+      </el-form-item>
     </el-form>
   </div>
 </template>
@@ -24,7 +28,8 @@ export default {
   data () {
     return {
       returnAns: '',
-      fileSelected: ''
+      fileSelected: '',
+      confReturn: ''
     }
   },
   mounted () {
@@ -70,6 +75,9 @@ export default {
         const data = 'fileName=' + this.fileSelected
         this.$axios.post('/configByYaml', data).then(response => {
           console.log(response.data)
+          if (response.data) {
+            this.confReturn = response.data.data
+          }
         }).catch(res => {
           alert('请求失败')
         })
