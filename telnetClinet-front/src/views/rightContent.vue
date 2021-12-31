@@ -5,7 +5,7 @@
       <el-tab-pane label="可视化配置">
         <el-form :inline="true" class="leftcard">
           <el-form-item>
-            <el-button type="primary" @click="onConnect">连接</el-button>
+            <el-button type="primary" @click="onConnect" style="width: 100px;margin-right: 500px">连接</el-button>
           </el-form-item>
           <el-form-item>
             <span style="font-size: 25px;padding-right: 10px;font-weight: bold">命令</span>

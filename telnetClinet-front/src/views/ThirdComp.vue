@@ -7,9 +7,10 @@
         </el-input>
       </el-form-item>
       <el-form-item >
-        <el-button type="primary" style="margin-left: 50%" @click="clickbutton">一键配置</el-button>
+        <el-button type="primary" style="margin-left: 40%" @click="clickbutton">一键配置</el-button>
       </el-form-item>
       <el-form-item >
+        <span style="font-size: 20px;float:left;margin-left: 10px;font-weight: bold">返回结果</span>
         <el-input readonly=true :rows="30" type="textarea" v-model="confReturn" style="width: 90%;">
         </el-input>
       </el-form-item>
