@@ -2,6 +2,7 @@
   <div id="app">
     <div class="black">
       <el-button class="left" @click="dialogTableVisible = true"> 导入文件 </el-button>
+      <el-button class="left" @click="Reload"> Reload </el-button>
       <el-select class="left" v-model="value" placeholder="请选择" @change="selectChange">
         <el-option
           v-for="item in options"
@@ -50,6 +51,14 @@ export default {
         }
       }).catch(res => {
         alert('获取文件列表 失败')
+      })
+    },
+    reload () {
+      this.$axios.post('/reload').then(response => {
+        console.log(response.data)
+        alert('reload 成功 ！')
+      }).catch(res => {
+        alert('请求失败')
       })
     },
     initValue () {

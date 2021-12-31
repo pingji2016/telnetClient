@@ -30,6 +30,9 @@
       <el-tab-pane label="脚本配置">
         <third-comp/>
       </el-tab-pane>
+      <el-tab-pane label="测试脚本">
+        <test-pane/>
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -37,11 +40,13 @@
 <script>
 import ScriptComp from './ScriptComp'
 import ThirdComp from './ThirdComp'
+import TestPane from './TestPane'
 export default {
   name: 'rightContent',
   components: {
     ScriptComp,
-    ThirdComp
+    ThirdComp,
+    TestPane
   },
   data () {
     return {

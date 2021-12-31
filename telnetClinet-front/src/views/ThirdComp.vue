@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import RouterItem from './RouterItem'
+import RouterItem from './TestPane'
 
 export default {
   name: 'ThirdComp',

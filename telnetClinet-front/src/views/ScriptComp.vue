@@ -93,11 +93,15 @@ export default {
       }).catch({})
     },
     clickbutton () {
-      let data = 'routerName=' + this.nodeSelect + '&ip' + this.pingOrder
+      // let data = 'routerName=' + this.nodeSelect + '&ip' + this.pingOrder
+      let data = {
+        routerName: this.nodeSelect,
+        ip: this.pingOrder
+      }
       this.$axios.post('/pingIP', data).then(response => {
         if (response.data) {
           console.log(response.data)
-          this.returnAns = response.data
+          this.returnAns = response.data.data
         }
         // eslint-disable-next-line handle-callback-err
       }).catch(err => {
@@ -109,7 +113,7 @@ export default {
       this.$axios.post('/getRouterTable', data).then(response => {
         if (response.data) {
           console.log(response.data)
-          this.routerAns = response.data
+          this.routerAns = response.data.data
         }
         // eslint-disable-next-line handle-callback-err
       }).catch(err => {
